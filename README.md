@@ -20,3 +20,7 @@ Validation requires downloading the AWS provider. Deployment requires an AWS san
 
 See [LEARNING.md](LEARNING.md) for the design decisions, verification evidence,
 and next steps. Never commit credentials, private hostnames, or real incident data.
+
+## Network parameters
+
+Set `vpc_cidr` and `subnet_cidr` with a local variable file or `-var`. Validation checks IPv4 CIDR syntax. Review subnet containment, overlap, provider subnet-size limits, and account context in the plan before applying. No deployment has been performed.
