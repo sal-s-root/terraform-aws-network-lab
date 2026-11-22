@@ -19,14 +19,14 @@ provider "aws" {
 }
 
 resource "aws_vpc" "lab" {
-  cidr_block           = "10.42.0.0/16"
+  cidr_block           = var.vpc_cidr
   enable_dns_support   = true
   enable_dns_hostnames = true
 }
 
 resource "aws_subnet" "private" {
   vpc_id                  = aws_vpc.lab.id
-  cidr_block              = "10.42.1.0/24"
+  cidr_block              = var.subnet_cidr
   map_public_ip_on_launch = false
 }
 
@@ -59,4 +59,28 @@ output "vpc_id" {
 
 output "private_subnet_id" {
   value = aws_subnet.private.id
+}
+
+variable "vpc_cidr" {
+  description = "IPv4 CIDR for the isolated lab VPC"
+  type        = string
+  default     = "10.42.0.0/16"
+  validation {
+    condition     = can(cidrnetmask(var.vpc_cidr))
+    error_message = "vpc_cidr must be a valid IPv4 CIDR."
+  }
+}
+
+variable "subnet_cidr" {
+  description = "IPv4 subnet CIDR; review containment in vpc_cidr before applying"
+  type        = string
+  default     = "10.42.1.0/24"
+  validation {
+    condition     = can(cidrnetmask(var.subnet_cidr))
+    error_message = "subnet_cidr must be a valid IPv4 CIDR."
+  }
+}
+
+output "isolated_security_group_id" {
+  value = aws_security_group.isolated.id
 }
