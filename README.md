@@ -36,7 +36,7 @@ containment, subnet overlap, AZ availability, tags, and every proposed resource.
 Only apply a reviewed plan. See [runbook](RUNBOOK.md) for teardown.
 
 State is local for this lab and ignored by Git. Team use requires a separately
-configured encrypted remote backend and locking. No AWS deployment is claimed.
+configured encrypted remote backend and locking. The checked workflow uses mocked provider plans.
 
 ## Project history
 

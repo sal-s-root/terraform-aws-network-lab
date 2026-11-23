@@ -1,9 +1,7 @@
-# Verification evidence
-
-## Completed checks
+# Validation
 
 `tofu fmt -check -recursive`, initialization, validation, and three mocked-provider tests passed. Assertions cover two subnets, public-IP assignment disabled, zero egress rules, invalid VPC prefix rejection, and single-zone rejection.
 
-## Limits
+## Coverage
 
-No AWS credentials, real account plan, apply, or destroy was used. Mocked plans do not prove deployed connectivity, actual subnet containment, quotas, or AZ availability.
+Mocked AWS provider plans with local state. Cloud connectivity, quotas, and account-specific behavior are separate deployment checks.
