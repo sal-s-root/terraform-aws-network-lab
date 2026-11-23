@@ -1,0 +1,12 @@
+name   = "infra-lab"
+region = "us-east-1"
+vpc_cidr = "10.42.0.0/16"
+private_subnets = {
+  a = { cidr = "10.42.1.0/24", az = "us-east-1a" }
+  b = { cidr = "10.42.2.0/24", az = "us-east-1b" }
+}
+tags = {
+  Project = "network-lab"
+  Owner = "your-team"
+  Environment = "lab"
+}

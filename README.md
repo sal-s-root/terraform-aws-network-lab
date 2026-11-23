@@ -1,26 +1,39 @@
-# Terraform AWS network lab
+# AWS private network module and lab
 
-## Purpose
+A reusable network module plus a small root configuration: one VPC, two private
+subnets across distinct availability zones, a private route table, and an isolated
+security group. There is no Internet gateway, NAT, compute, or default Internet route.
 
-Move from configuring individual hosts to describing cloud networking as reviewed infrastructure code.
-
-## Run locally
-
-```sh
-terraform init -backend=false
-terraform fmt -check
-terraform validate
+```mermaid
+flowchart LR
+  VPC[VPC] --> A[Private subnet · AZ A]
+  VPC --> B[Private subnet · AZ B]
+  A --> RT[Private route table · local routes only]
+  B --> RT
+  VPC --> SG[Security group · no ingress or egress]
 ```
 
-## Scope and limitations
+## Validate without AWS access
 
-Validation requires downloading the AWS provider. Deployment requires an AWS sandbox account and a reviewed plan. This repository does not claim a live deployment or cost estimate.
+```sh
+tofu init -backend=false
+tofu fmt -check -recursive
+tofu validate
+tofu test
+```
 
-## Engineering notes
+Tests use a mocked AWS provider and plan assertions. They check subnet count,
+public-IP assignment, empty egress policy, and invalid-input rejection. They do
+not demonstrate AWS deployment, quota availability, or end-to-end connectivity.
+The configuration requires Terraform/OpenTofu with provider mocking support.
 
-See [LEARNING.md](LEARNING.md) for the design decisions, verification evidence,
-and next steps. Never commit credentials, private hostnames, or real incident data.
+## Review a real sandbox plan
 
-## Network parameters
+Copy `terraform.tfvars.example` to a local ignored `.auto.tfvars` file, set your
+ownership tags and zones, authenticate to your own sandbox account with temporary
+credentials, then run `tofu plan -out=lab.tfplan`. Inspect account, region, CIDR
+containment, subnet overlap, AZ availability, tags, and every proposed resource.
+Only apply a reviewed plan. See [runbook](RUNBOOK.md) for teardown.
 
-Set `vpc_cidr` and `subnet_cidr` with a local variable file or `-var`. Validation checks IPv4 CIDR syntax. Review subnet containment, overlap, provider subnet-size limits, and account context in the plan before applying. No deployment has been performed.
+State is local for this lab and ignored by Git. Team use requires a separately
+configured encrypted remote backend and locking. No AWS deployment is claimed.
