@@ -37,3 +37,7 @@ Only apply a reviewed plan. See [runbook](RUNBOOK.md) for teardown.
 
 State is local for this lab and ignored by Git. Team use requires a separately
 configured encrypted remote backend and locking. No AWS deployment is claimed.
+
+## Project history
+
+See [history and scope](HISTORY.md) for the correction of earlier synthetic dates.
